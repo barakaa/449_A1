@@ -1,0 +1,19 @@
+Name:
+me2
+
+forced partial assignment:
+(1,A)
+(4,C)
+
+forbidden machine:
+(2,D)
+
+too-near tasks:
+
+machine penalties:
+1 1 1 1
+1 1 1 1
+1 1 1 1
+1 1 1 1
+
+too-near penalities
