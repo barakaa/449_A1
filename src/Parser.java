@@ -7,9 +7,8 @@ import java.util.Scanner;;
 
 public class Parser {
 
-	private List<String> headers = new ArrayList<String>(Arrays
-			.asList("Name:", "forced partial assignment:", "forbidden machine:",
-					"too-near tasks:", "machine penalties:", "too-near penalities"));
+	private List<String> headers = new ArrayList<String>(Arrays.asList("Name:", "forced partial assignment:",
+			"forbidden machine:", "too-near tasks:", "machine penalties:", "too-near penalities"));
 
 	private Data data;
 	private String fileName;
@@ -26,7 +25,7 @@ public class Parser {
 		String line, header = null;
 		while (scan.hasNextLine()) {
 			line = scan.nextLine().trim();
-			if (headers.contains(line)) header = line;
+			if (headers.contains(line))	header = line;
 			else parseLine(line, header);
 		}
 		scan.close();
@@ -36,7 +35,8 @@ public class Parser {
 	private void parseLine(String line, String header) {
 		line = line.replaceAll("[\\(\\)]", "");
 		if (header.equals(headers.get(0))) {
-			if (line.length() > 0) data.name = line;
+			if (line.length() > 0)
+				data.name = line;
 		} else if (header.equals(headers.get(1))) {
 			data.forcedPartialAssignemnt.add(getPair(line));
 		} else if (header.equals(headers.get(2))) {
@@ -57,7 +57,7 @@ public class Parser {
 			for (int i = 0; i < machPenaltyLineLenght; i++) {
 				machinePenaltyVals[i] = Integer.parseInt(splitLine[i]);
 			}
-			data.machinePenalties[machPenaltyLineCount] = machinePenaltyVals;
+			data.setPenaltyLine(machPenaltyLineCount, machinePenaltyVals);
 			machPenaltyLineCount++;
 		}
 	}
