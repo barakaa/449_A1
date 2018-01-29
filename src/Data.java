@@ -13,7 +13,7 @@ public class Data {
 		forcedPartialAssignemnt = new ArrayList<Pair<Integer, Character>>();
 		forbiddenMachine = new ArrayList<Pair<Integer, Character>>();
 		tooNearTask = new ArrayList<Pair<Integer, Integer>>();
-		machinePenalties = new int[Main.penalties_length][Main.penalties_length];
+		machinePenalties = new int[8][8];
 		tooNearPenalties = new ArrayList<Triple>();
 	}
 
@@ -24,13 +24,10 @@ public class Data {
 	public void setPenaltyLine(int line, int[] vals) {
 		machinePenalties[line] = vals;
 	}
-	
+
 	public Pair<Integer, Character> getPair(int mach, int task) {
+		// 65 = 'A' therefore task + 64 = A-G for 1-8
 		char val = (char) (task + 64);
 		return new Pair<Integer, Character>(mach, val);
-	}
-
-	public Pair<Integer, Integer> getIntPair(int mach, int task) {
-		return new Pair<Integer, Integer>(mach, task);
 	}
 }

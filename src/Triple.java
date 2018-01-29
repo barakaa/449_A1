@@ -9,4 +9,8 @@ public class Triple {
 		this.task2 = task2;
 		this.penalty = penalty;
 	}
+	
+	public String toString() {
+		return "(" + task1 + "," + task2 + "," + penalty + ")";
+	}
 }
