@@ -11,7 +11,7 @@ public class Tree {
         root.children = new ArrayList<Node>();
     }
 
-    public static class Node {
+    public class Node {
     	private boolean checked = false;
         private Node parent;
         private Triple data;
