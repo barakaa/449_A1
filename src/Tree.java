@@ -5,9 +5,8 @@ import java.util.List;
 public class Tree {
 	private Node root;
 
-    public Tree(rootData) {
+    public Tree() {
         root = new Node();
-        root.data = rootData;
         root.children = new ArrayList<Node>();
     }
 
@@ -15,9 +14,17 @@ public class Tree {
     	private boolean checked = false;
         private Node parent;
         private Triple data;
-        private List children;
-        private int penalty = data.penalty;
-        private int totalPenalty = parent.totalPenalty + penalty;
-        private int[] path;
+        private ArrayList<Node> children;
+        private int totalPenalty;
+        private ArrayList<int> path;
+        
+        public Node(Node parent) {
+        	children = new ArrayList<Node>();
+        	totalPenalty = parent.totalPenalty + penalty;
+        }
+        
+        public int penalty() {
+        	return data.penalty;
+        }
     }
 }
