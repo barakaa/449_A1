@@ -1,7 +1,7 @@
 public class Triple {
 
-	public char task1;
-	public char task2;
+	public int task1;
+	public int task2;
 	public int penalty;
 
 	public Triple(char task1, char task2, int penalty) {

@@ -17,10 +17,7 @@ public class Tree {
         private Triple data;
         private List children;
         private int penalty = data.penalty;
-        private int totalPenalty = findTotal();
-    }
-    
-    private int findTotal(){
-    return parent.totalPenalty + penalty;
+        private int totalPenalty = parent.totalPenalty + penalty;
+        private int[] path;
     }
 }
