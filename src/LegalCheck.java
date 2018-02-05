@@ -16,7 +16,7 @@ public class LegalCheck {
 				right = loc+1;
 				if(left == -1) {left = 7;}
 				if(right == 8) {right = 0;}
-				if(d.tooNearTask[i].first == nodeCheck.path[left] || d.tooNearTask[i].second == nodeCheck.path[left] || d.tooNearTask[i].first == nodeCheck.path[right] || d.tooNearTask[i].second == nodeCheck.path[right]) {
+				if(d.tooNearTask[i].first == nodeCheck.path.get(left) || d.tooNearTask[i].second == nodeCheck.path.get(left) || d.tooNearTask[i].first == nodeCheck.path.get(right) || d.tooNearTask[i].second == nodeCheck.path.get(right)) {
 					return true;
 				}
 				
@@ -47,7 +47,7 @@ public class LegalCheck {
 	}
 	
 	
-	private null prettyClose(Pair<Integer,Integer> pair) {
+	private void prettyClose(Pair<Integer,Integer> pair) {
 		int loc;
 		int left, right;
 		for(int i = 0; i < d.tooNearPenalties.length(); i++) {
@@ -57,7 +57,7 @@ public class LegalCheck {
 				right = loc+1;
 				if(left == -1) {left = 7;}
 				if(right == 8) {right = 0;}
-				if(d.tooNearTask[i].first == nodeCheck.path[left] || d.tooNearTask[i].second == nodeCheck.path[left] || d.tooNearTask[i].first == nodeCheck.path[right] || d.tooNearTask[i].second == nodeCheck.path[right]) {
+				if(d.tooNearTask[i].first == nodeCheck.path.get(left) || d.tooNearTask[i].second == nodeCheck.path.get(left) || d.tooNearTask[i].first == nodeCheck.path.get(right) || d.tooNearTask[i].second == nodeCheck.path.get(right)) {
 					nodeCheck.data.penalty = d.tooNearPenalties[i].penalty;
 							break;
 				}
@@ -67,7 +67,7 @@ public class LegalCheck {
 		}
 	}
 	
-	private null penaltyCheck(Pair<Integer,Integer> pair) {
+	private void penaltyCheck(Pair<Integer,Integer> pair) {
 		nodeCheck.data.penalty += d.getPenalty(pair.first,pair.second);
 	}
 	
@@ -76,7 +76,7 @@ public class LegalCheck {
 	//takes Node as arg. copies Node into a new node, then returns the new node with updated values
 	public Node assignCheck(Node treeNode) {
 		nodeCheck = treeNode;
-		Pair<Integer,Integer> sched = New Pair(treeNode.data.task1, treeNode.data.task2); //data is Mach, task. not task,task
+		Pair<Integer,Integer> sched = new Pair(treeNode.data.task1, treeNode.data.task2); //data is Mach, task. not task,task
 		
 		if(conflictCheck(sched) || tooClose(sched) || forcingPartial(sched)) {
 			treeNode.checked = true;
