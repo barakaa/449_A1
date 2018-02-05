@@ -56,6 +56,8 @@ public class Parser {
 			ret = parseMachinePenalties(line);
 		} else if (header.equals(headers.get(5))) {
 			ret = parseTooNearPenalties(line);
+		} else {
+			System.out.println("parser error");
 		}
 		return ret;
 	}
@@ -130,14 +132,24 @@ public class Parser {
 	private boolean parseTooNearPenalties(String line) {
 		boolean ret = true;
 		String[] lineData = line.split(",");
-		char task1 = lineData[0].charAt(0);
-		char task2 = lineData[1].charAt(0);
-		if (!allowedCharacters.contains(task1) || !allowedCharacters.contains(task2)) {
+		int task1 = lineData[0].charAt(0) - 64;
+		int task2 = lineData[1].charAt(0) - 64;
+		if (task1 < 0 || task1 > machPenaltyLineLength || task2 < 0 || task2 > machPenaltyLineLength) {
 			System.out.println("invalid task");
 			ret = false;
+		} else {
+			Triple oldTriple = data.hasTooNearPenalty(task1, task2);
+			int penalty = Integer.parseInt(lineData[2]);
+			Triple newTriple = new Triple(task1, task2, penalty);
+			if (oldTriple != null) {
+				if (!newTriple.equals(oldTriple)) {
+						data.tooNearPenalties.remove(oldTriple);
+						data.tooNearPenalties.add(newTriple);
+				}
+			} else {
+				data.tooNearPenalties.add(newTriple);
+			}
 		}
-		int penalty = Integer.parseInt(lineData[2]);
-		data.tooNearPenalties.add(new Triple(task1, task2, penalty));
 		return ret;
 	}
 

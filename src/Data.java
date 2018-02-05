@@ -25,6 +25,15 @@ public class Data {
 		machinePenalties[line] = vals;
 	}
 
+	public Triple hasTooNearPenalty(int task1, int task2) {
+		Triple ret = null;
+		for (Triple triple : tooNearPenalties) {
+			ret = triple;
+			if (triple.task1 == task1 && triple.task2 == task2) break;
+		}
+		return ret;
+	}
+
 	public Pair<Integer, Character> getPair(int mach, int task) {
 		// 65 = 'A' therefore task + 64 = A-G for 1-8
 		char val = (char) (task + 64);
