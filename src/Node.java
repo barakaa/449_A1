@@ -2,13 +2,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Node {
-	private boolean checked = false;
-	private Node parent;
-	private Triple data;
-	private ArrayList<Node> children;
-	private int totalPenalty;
+	public boolean checked = false;
+	public Node parent;
+	public Triple data;
+	public ArrayList<Node> children;
+	public int totalPenalty;
 
-	private ArrayList<int> path;
+	public ArrayList<int> path;
     
     public Node(Node parent) {
     	children = new ArrayList<Node>();
