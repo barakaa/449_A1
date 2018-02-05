@@ -12,7 +12,7 @@ public class Node {
     
     public Node(Node parent) {
     	children = new ArrayList<Node>();
-    	totalPenalty = parent.totalPenalty + penalty;
+    	totalPenalty = parent.totalPenalty + penalty();
     }
 
 	public int penalty() {
