@@ -10,9 +10,10 @@ public class Node {
 
 	public ArrayList<Integer> path;
     
-    public Node(Node parent) {
+    public Node(Node dad) {
     	children = new ArrayList<Node>();
-    	totalPenalty = parent.totalPenalty + penalty();
+    	parent = dad;
+    	totalPenalty = dad.totalPenalty + penalty();
     }
 
 	public int penalty() {
