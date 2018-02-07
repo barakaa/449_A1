@@ -8,7 +8,7 @@ public class Node {
 	public ArrayList<Node> children;
 	public int totalPenalty;
 
-	public ArrayList<int> path;
+	public ArrayList<Integer> path;
     
     public Node(Node parent) {
     	children = new ArrayList<Node>();
