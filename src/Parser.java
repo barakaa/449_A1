@@ -7,34 +7,35 @@ import java.util.Scanner;
 
 public class Parser {
 
-	private List<String> headers = new ArrayList<String>(Arrays.asList("Name:", "forced partial assignment:",
-			"forbidden machine:", "too-near tasks:", "machine penalties:", "too-near penalities"));
-	private List<Character> allowedCharacters = new ArrayList<Character>(Arrays.asList('A', 'B', 'C', 'D', 'E', 'F', 'G'));
+	private List<String> headers = new ArrayList<String>(Arrays
+			.asList("Name:", "forced partial assignment:", "forbidden machine:",
+					"too-near tasks:", "machine penalties:", "too-near penalities"));
+	private List<Character> allowedCharacters = new ArrayList<Character>(
+			Arrays.asList('A', 'B', 'C', 'D', 'E', 'F', 'G'));
 	private Data data;
-	private String fileName;
 	private int machPenaltyLineCount = 0;
-	private final int machPenaltyLineLength = 8;
+	private final int machPenaltyLineLength = Main.dimension;
 
-	public Parser(String fileName) {
-		this.fileName = fileName;
-	}
-
-	public Data loadData() throws FileNotFoundException {
+	public Data loadData(String fileName) {
 		data = new Data();
-		Scanner scan = new Scanner(new File(fileName));
-		String line, header = null;
-		while (scan.hasNextLine()) {
-			line = scan.nextLine().trim();
-			if (headers.contains(line))
-				header = line;
-			else {
-				if (!parseLine(line, header)) {
-					data = null;
-					break;
+		Scanner scan;
+		try {
+			scan = new Scanner(new File(fileName));
+			String line, header = null;
+			while (scan.hasNextLine()) {
+				line = scan.nextLine().trim();
+				if (headers.contains(line)) header = line;
+				else {
+					if (!parseLine(line, header)) {
+						data = null;
+						break;
+					}
 				}
 			}
+			scan.close();
+		} catch (FileNotFoundException fnfe) {
+			data = null;
 		}
-		scan.close();
 		return data;
 	}
 
@@ -69,7 +70,7 @@ public class Parser {
 			System.out.println("invalid machine/task");
 			ret = false;
 		} else {
-			if (!data.forcedPartialAssignemnt.contains(pair))
+			if (!data.forcedPartialAssignemnt.contains(pair) && pair != null)
 				data.forcedPartialAssignemnt.add(pair);
 		}
 		return ret;
@@ -82,7 +83,7 @@ public class Parser {
 			System.out.println("invalid machine/task");
 			ret = false;
 		} else {
-			if (!data.forbiddenMachine.contains(pair))
+			if (!data.forbiddenMachine.contains(pair) && pair != null) 
 				data.forbiddenMachine.add(pair);
 		}
 		return ret;
@@ -97,8 +98,10 @@ public class Parser {
 			ret = false;
 		} else {
 			if (pair != null) {
-				Pair<Integer, Integer> reversedPair = new Pair<Integer, Integer>(pair.second, pair.first);
-				if (!data.tooNearTask.contains(pair) && !data.tooNearTask.contains(reversedPair))
+				Pair<Integer, Integer> reversedPair = new Pair<Integer, Integer>(
+						pair.second, pair.first);
+				if (!data.tooNearTask.contains(pair)
+						&& !data.tooNearTask.contains(reversedPair))
 					data.tooNearTask.add(pair);
 			}
 		}
@@ -132,9 +135,10 @@ public class Parser {
 	private boolean parseTooNearPenalties(String line) {
 		boolean ret = true;
 		String[] lineData = line.split(",");
-		int task1 = lineData[0].charAt(0) - 64;
-		int task2 = lineData[1].charAt(0) - 64;
-		if (task1 < 0 || task1 > machPenaltyLineLength || task2 < 0 || task2 > machPenaltyLineLength) {
+		int task1 = lineData[0].charAt(0) - 48;
+		int task2 = lineData[1].charAt(0) - 48;
+		if (task1 < 0 || task1 > machPenaltyLineLength || task2 < 0
+				|| task2 > machPenaltyLineLength) {
 			System.out.println("invalid task");
 			ret = false;
 		} else {
@@ -143,8 +147,8 @@ public class Parser {
 			Triple newTriple = new Triple(task1, task2, penalty);
 			if (oldTriple != null) {
 				if (!newTriple.equals(oldTriple)) {
-						data.tooNearPenalties.remove(oldTriple);
-						data.tooNearPenalties.add(newTriple);
+					data.tooNearPenalties.remove(oldTriple);
+					data.tooNearPenalties.add(newTriple);
 				}
 			} else {
 				data.tooNearPenalties.add(newTriple);
@@ -161,8 +165,7 @@ public class Parser {
 			char second = lineData[1].charAt(0);
 			if ((first < 1 || first > 8) || (!allowedCharacters.contains(second)))
 				ret = null;
-			else
-				ret = new Pair<Integer, Character>(first, second);
+			else ret = new Pair<Integer, Character>(first, second);
 		}
 		return ret;
 	}
@@ -173,10 +176,8 @@ public class Parser {
 		if (lineData.length == 2) {
 			int first = Integer.parseInt(lineData[0]);
 			int second = Integer.parseInt(lineData[1]);
-			if ((first < 1 || first > 8) || (second < 1 || second > 8))
-				ret = null;
-			else
-				ret = new Pair<Integer, Integer>(first, second);
+			if ((first < 1 || first > 8) || (second < 1 || second > 8)) ret = null;
+			else ret = new Pair<Integer, Integer>(first, second);
 		}
 		return ret;
 	}
