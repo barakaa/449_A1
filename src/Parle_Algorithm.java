@@ -12,20 +12,20 @@ public class Parle_Algorithm {
 	public int parse = 0; // index of current max parle
 	public int[] sumkey = new int[Main.dimension]; // stop position for Parle_kid
 	public int[] numberkey = new int[Main.dimension];
-	public int[][] soft_Too_Near;
-	public int[][] Too_Near;
+	public int[][] tooNearPenalties;
+	public int[][] tooNearTask;
 	public int[][] MustCon;
 	private boolean setFlag1 = false;
 
-	public Parle_Algorithm(int[] list, int[] x, int[] y, int[] count, int[][] toonear, int[][] soft, int[][] must) {
+	public Parle_Algorithm(int[] list, int[] x, int[] y, int[] count, Data data) {
 		Activeparle = list;
 		Active_x = x;
 		Active_y = y;
 		numberkey = count;
-		Too_Near = toonear;
-		soft_Too_Near = soft;
-		if (must.length > 0) {
-			MustCon = must;
+		tooNearTask = data.tooNearTaskAsArray();
+		tooNearPenalties = data.tooNearPenaltiesAsArray();
+		if (data.forcedPartialAssignemntAsArray().length > 0) {
+			MustCon = data.forcedPartialAssignemntAsArray();
 		} else {
 			setFlag1 = true;
 		}
@@ -51,7 +51,7 @@ public class Parle_Algorithm {
 				if (i == sumkey[setindex(i)] - 1) {
 					parse = parse - 1;
 				}
-				boolean checkcompare = search(validList, Too_Near);
+				boolean checkcompare = search(validList, tooNearTask);
 				boolean Must_Contain;
 				if (setFlag1 == true) {
 					Must_Contain = true;
@@ -144,10 +144,10 @@ public class Parle_Algorithm {
 		for (int i = 0; i < checking.length; i++) {
 			for (int j = 0; j < stop; j++) {
 				if (i == checking.length - 1) {
-					if (checking[i] == Too_Near[j][0] && checking[0] == Too_Near[j][1]) {
+					if (checking[i] == tooNearTask[j][0] && checking[0] == tooNearTask[j][1]) {
 						result = true;
 					}
-				} else if (checking[i] == Too_Near[j][0] && checking[i + 1] == Too_Near[j][1]) {
+				} else if (checking[i] == tooNearTask[j][0] && checking[i + 1] == tooNearTask[j][1]) {
 					result = true;
 				}
 			}
@@ -173,15 +173,15 @@ public class Parle_Algorithm {
 	}
 
 	public int softsearchNear(int[] checking) {
-		int stop = soft_Too_Near.length;
+		int stop = tooNearPenalties.length;
 		int result = 0;
 		for (int i = 0; i < checking.length; i++) {
 			for (int j = 0; j < stop; j++) {
 				if (i == checking.length - 1) {
 					continue;
 				}
-				if (checking[i] == Too_Near[j][0] && checking[i + 1] == Too_Near[j][1]) {
-					result += soft_Too_Near[j][2];
+				if (checking[i] == tooNearTask[j][0] && checking[i + 1] == tooNearTask[j][1]) {
+					result += tooNearPenalties[j][2];
 				}
 			}
 		}

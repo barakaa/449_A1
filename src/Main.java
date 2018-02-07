@@ -15,7 +15,7 @@ public class Main {
 
 		Algorithm matrixOf = new Algorithm(data.machinePenalties, forbiddenMachine);
 		matrixOf.turnconstrains();
-		Parle_Algorithm Parle = new Parle_Algorithm(matrixOf.activeList, matrixOf.activeCordinates_x, matrixOf.activeCordinates_y, matrixOf.hashed, tooNearTask, tooNearPenalties, forcedPartialAssignemnt);
+		Parle_Algorithm Parle = new Parle_Algorithm(matrixOf.activeList, matrixOf.activeCordinates_x, matrixOf.activeCordinates_y, matrixOf.hashed, data);
 		Parle.Parle_kid(Parle.numberkey[0], 0);
 
 		System.out.print("Solution: ");
