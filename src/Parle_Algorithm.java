@@ -1,14 +1,14 @@
 
 public class Parle_Algorithm {
 	public int[] Activeparle;
-	public int[] Sendend = { -1, -1, -1, -1 };
-	public int[] Maxparle = { -1, -1, -1, -1 }; // current best solution
+	public int[] Sendend;
+	public int[] Maxparle; // current best solution
 	public int[] Active_x;
 	public int[] Active_y;
 	public int[] send_Y = new int[Main.dimension];
-	public int[] checkpath = { -1, -1, -1, -1 };
-	public int[] validList = { -1, -1, -1, -1 };
-	public int[] reset = { -1, -1, -1, -1 };
+	public int[] checkpath;
+	public int[] validList;
+	public int[] reset;
 	public int parse = 0; // index of current max parle
 	public int[] sumkey = new int[Main.dimension]; // stop position for Parle_kid
 	public int[] numberkey = new int[Main.dimension];
@@ -19,8 +19,13 @@ public class Parle_Algorithm {
 
 	public Parle_Algorithm(int[] list, int[] x, int[] y, int[] count, Data data) {
 		Activeparle = list;
+		Sendend = arrayInit();
+		Maxparle = arrayInit();
 		Active_x = x;
 		Active_y = y;
+		checkpath = arrayInit();
+		validList = arrayInit();
+		reset = arrayInit();
 		numberkey = count;
 		tooNearTask = data.tooNearTaskAsArray();
 		tooNearPenalties = data.tooNearPenaltiesAsArray();
@@ -186,5 +191,12 @@ public class Parle_Algorithm {
 			}
 		}
 		return result;
+	}
+	
+	private int[] arrayInit() {
+		int[] ret = new int [Main.dimension];
+		for (int i = 0 ; i<Main.dimension;i++)
+			ret[i] = -1;
+		return ret;
 	}
 }
