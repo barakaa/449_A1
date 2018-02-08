@@ -1,3 +1,4 @@
+
 public class Triple {
 
 	public int task1;

@@ -137,6 +137,8 @@ public class Parser {
 		String[] lineData = line.split(",");
 		int task1 = lineData[0].charAt(0) - 48;
 		int task2 = lineData[1].charAt(0) - 48;
+		System.out.println(task1);
+		System.out.println(task2);
 		if (task1 < 0 || task1 > machPenaltyLineLength || task2 < 0
 				|| task2 > machPenaltyLineLength) {
 			System.out.println("invalid task");
