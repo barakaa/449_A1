@@ -2,11 +2,14 @@ package src;
 
 public class TreeBuilder {
 	private Tree planted;
+	private LegalCheck legalCheck;
 	
-	public TreeBuilder() {
+	public TreeBuilder(Data constraints) {
 		planted = new Tree();
 		planted.root.data = new Triple(-1, 0, -1);
 		planted.root.totalPenalty = 0;
+		this.legalCheck = new LegalCheck(constraints);
+		
 		//for(int i = 0; i < 8; i++) {			//no actual call to parent, so took this out temporarily
 		//	Node child = new Node()
 		//}
@@ -21,12 +24,13 @@ public class TreeBuilder {
 			current.children.get(i).path = current.path;
 		}
 		
+		
 		while(mach < 8) {									//setting all the children. IF ILLEGAL ASSIGNMENT: children.path becomes null, and children.checked becomes true
 			if(current.children.get(mach).path.get(mach) == null) {
 				current.children.get(mach).path.set(mach, task);
 				current.children.get(mach).data = new Triple(mach, task, 0);		//sets data into the current child being looked at
 				
-				current.children.set(mach,  assignCheck(current.children.get(mach))); //assignCheck will edit totalPenalty and penalty, as well as set checked if illegal assignment
+				current.children.set(mach, legalCheck.assignCheck(current.children.get(mach))); //assignCheck will edit totalPenalty and penalty, as well as set checked if illegal assignment
 				if(current.children.get(mach).checked) {							//only sets in path if checked is false, which means there is no problem
 					current.children.get(mach).path = null;							//if illegal assignment, erases path, and sets to checked
 					current.children.get(mach).checked = true;
