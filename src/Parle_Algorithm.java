@@ -192,10 +192,10 @@ public class Parle_Algorithm {
 		}
 		return result;
 	}
-	
+
 	private int[] arrayInit() {
-		int[] ret = new int [Main.dimension];
-		for (int i = 0 ; i<Main.dimension;i++)
+		int[] ret = new int[Main.dimension];
+		for (int i = 0; i < Main.dimension; i++)
 			ret[i] = -1;
 		return ret;
 	}

@@ -16,7 +16,7 @@ public class Main {
 		Parle.Parle_kid(Parle.numberkey[0], 0);
 
 		System.out.print("Solution: ");
-		for (int i = 0; i < 4; i++) {
+		for (int i = 0; i < Main.dimension; i++) {
 			System.out.print(Tasks[Parle.send_Y[i]] + " ");
 		}
 		System.out.print("penalty:" + (Parle.setValue(Parle.Sendend) + Parle.softsearchNear(Parle.validList)));

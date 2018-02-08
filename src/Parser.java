@@ -11,7 +11,7 @@ public class Parser {
 			.asList("Name:", "forced partial assignment:", "forbidden machine:",
 					"too-near tasks:", "machine penalties:", "too-near penalities"));
 	private List<Character> allowedCharacters = new ArrayList<Character>(
-			Arrays.asList('A', 'B', 'C', 'D', 'E', 'F', 'G'));
+			Arrays.asList('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'));
 	private Data data;
 	private int machPenaltyLineCount = 0;
 	private final int machPenaltyLineLength = Main.dimension;
