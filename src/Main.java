@@ -1,12 +1,14 @@
-// program contains 3 classes. this being main that prints the results.
-// if 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+
 public class Main {
 
 	public static final int dimension = 8;
 	public static char[] Tasks = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H' };
 
 	public static void main(String[] args) {
-		Data data = new Parser().loadData(args[0]);
+		StringBuilder sb = new StringBuilder();
+		Data data = new Parser(sb).loadData(args[0]);
 		if (data == null) return;
 		int[][] forbiddenMachine = data.forbiddenMachineAsArray(); // illegal assignments.
 
@@ -17,14 +19,21 @@ public class Main {
 
 		int penalty = Parle.setValue(Parle.Sendend) + Parle.softsearchNear(Parle.validList);
 		if (penalty < 0) {
-			System.out.println("No valid solution possible!");
+			sb.append("No valid solution possible!\n");
 		} else {
-			System.out.print("Solution ");
+			sb.append("Solution ");
 			for (int i = 0; i < Main.dimension; i++) {
-				System.out.print(Tasks[Parle.send_Y[i]]);
-				System.out.print(i < Main.dimension - 1 ? " " : "; ");
+				sb.append(Tasks[Parle.send_Y[i]]);
+				sb.append(i < Main.dimension - 1 ? " " : "; ");
 			}
-			System.out.println("Quality:" + penalty);
+			sb.append("Quality:" + penalty + "\n");
+		}
+
+		try {
+			PrintWriter pw = new PrintWriter(args[1]);
+			pw.write(sb.toString());
+			pw.close();
+		} catch (FileNotFoundException e) {
 		}
 	}
 }

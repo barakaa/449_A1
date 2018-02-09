@@ -16,6 +16,12 @@ public class Parser {
 	private int machPenaltyLineCount = 0;
 	private final int machPenaltyLineLength = Main.dimension;
 
+	private StringBuilder sb;
+	
+	public Parser(StringBuilder stringBuilder) {
+		this.sb = stringBuilder;
+	}
+	
 	public Data loadData(String fileName) {
 		data = new Data();
 		Scanner scan;
@@ -58,7 +64,7 @@ public class Parser {
 		} else if (header.equals(headers.get(5))) {
 			ret = parseTooNearPenalties(line);
 		} else {
-			System.out.println("Error while parsing input file");
+			sb.append("Error while parsing input file\n");
 		}
 		return ret;
 	}
@@ -67,7 +73,7 @@ public class Parser {
 		boolean ret = true;
 		Pair<Integer, Character> pair = getPair(line);
 		if (line.length() > 0 && pair == null) {
-			System.out.println("invalid machine/task");
+			sb.append("invalid machine/task\n");
 			ret = false;
 		} else {
 			if (!data.forcedPartialAssignemnt.contains(pair) && pair != null)
@@ -80,7 +86,7 @@ public class Parser {
 		boolean ret = true;
 		Pair<Integer, Character> pair = getPair(line);
 		if (line.length() > 0 && pair == null) {
-			System.out.println("invalid machine/task");
+			sb.append("invalid machine/task\n");
 			ret = false;
 		} else {
 			if (!data.forbiddenMachine.contains(pair) && pair != null) 
@@ -94,7 +100,7 @@ public class Parser {
 		boolean ret = true;
 		Pair<Integer, Integer> pair = getIntPair(line);
 		if (line.length() > 0 && pair == null) {
-			System.out.println("invalid machine/task");
+			sb.append("invalid machine/task\n");
 			ret = false;
 		} else {
 			if (pair != null) {
@@ -128,7 +134,7 @@ public class Parser {
 		} else if (line.isEmpty() && machPenaltyLineCount != machPenaltyLineLength) {
 			ret = false;
 		}
-		if (!ret) System.out.println("machine penalty error");
+		if (!ret) sb.append("machine penalty error\n");
 		return ret;
 	}
 
@@ -139,7 +145,7 @@ public class Parser {
 		int task2 = lineData[1].charAt(0) - 48;
 		if (task1 < 0 || task1 > machPenaltyLineLength || task2 < 0
 				|| task2 > machPenaltyLineLength) {
-			System.out.println("invalid task");
+			sb.append("invalid task\n");
 			ret = false;
 		} else {
 			Triple oldTriple = data.hasTooNearPenalty(task1, task2);
