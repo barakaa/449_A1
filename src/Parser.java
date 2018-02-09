@@ -58,7 +58,7 @@ public class Parser {
 		} else if (header.equals(headers.get(5))) {
 			ret = parseTooNearPenalties(line);
 		} else {
-			System.out.println("parser error");
+			System.out.println("Error while parsing input file");
 		}
 		return ret;
 	}
