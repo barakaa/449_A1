@@ -19,11 +19,12 @@ public class Main {
 		if (penalty < 0) {
 			System.out.println("No valid solution possible!");
 		} else {
-			System.out.print("Solution: ");
+			System.out.print("Solution ");
 			for (int i = 0; i < Main.dimension; i++) {
-				System.out.print(Tasks[Parle.send_Y[i]] + " ");
+				System.out.print(Tasks[Parle.send_Y[i]]);
+				System.out.print(i < Main.dimension - 1 ? " " : "; ");
 			}
-			System.out.println("penalty:" + penalty);
+			System.out.println("Quality:" + penalty);
 		}
 	}
 }
