@@ -1,0 +1,19 @@
+Name:
+shouldFail2
+
+forced partial assignment:
+
+
+too-near tasks:
+
+machine penalties:
+1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1
+
+too-near penalities
