@@ -7,21 +7,22 @@ import java.util.Scanner;
 
 public class Parser {
 
-	private List<String> headers = new ArrayList<String>(Arrays
-			.asList("Name:", "forced partial assignment:", "forbidden machine:",
-					"too-near tasks:", "machine penalties:", "too-near penalities"));
+	private List<String> headers = new ArrayList<String>(Arrays.asList("Name:", "forced partial assignment:",
+			"forbidden machine:", "too-near tasks:", "machine penalties:", "too-near penalities"));
 	private List<Character> allowedCharacters = new ArrayList<Character>(
 			Arrays.asList('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'));
 	private Data data;
 	private int machPenaltyLineCount = 0;
+	private int headerCount = 0;
 	private final int machPenaltyLineLength = Main.dimension;
+	boolean flag = false;
 
 	private StringBuilder sb;
-	
+
 	public Parser(StringBuilder stringBuilder) {
 		this.sb = stringBuilder;
 	}
-	
+
 	public Data loadData(String fileName) {
 		data = new Data();
 		Scanner scan;
@@ -30,13 +31,19 @@ public class Parser {
 			String line, header = null;
 			while (scan.hasNextLine()) {
 				line = scan.nextLine().trim();
-				if (headers.contains(line)) header = line;
-				else {
+				if (headers.contains(line)) {
+					header = line;
+					headerCount++;
+				} else {
 					if (!parseLine(line, header)) {
 						data = null;
 						break;
 					}
 				}
+			}
+			if (headerCount != header.length()) {
+				data = null;
+				if (!flag) sb.append("Error while parsing input file\n");
 			}
 			scan.close();
 		} catch (FileNotFoundException fnfe) {
@@ -65,6 +72,7 @@ public class Parser {
 			ret = parseTooNearPenalties(line);
 		} else {
 			sb.append("Error while parsing input file\n");
+			flag =true;
 		}
 		return ret;
 	}
@@ -89,25 +97,22 @@ public class Parser {
 			sb.append("invalid machine/task\n");
 			ret = false;
 		} else {
-			if (!data.forbiddenMachine.contains(pair) && pair != null) 
+			if (!data.forbiddenMachine.contains(pair) && pair != null)
 				data.forbiddenMachine.add(pair);
 		}
 		return ret;
 	}
 
-	// TODO: check with Si Zhang that (1,2) and (2,1) in the same file is valid/invalid
 	private boolean parseTooNearTask(String line) {
 		boolean ret = true;
-		Pair<Integer, Integer> pair = getIntPair(line);
+		Pair<Integer, Integer> pair = getIntCharPair(line);
 		if (line.length() > 0 && pair == null) {
 			sb.append("invalid machine/task\n");
 			ret = false;
 		} else {
 			if (pair != null) {
-				Pair<Integer, Integer> reversedPair = new Pair<Integer, Integer>(
-						pair.second, pair.first);
-				if (!data.tooNearTask.contains(pair)
-						&& !data.tooNearTask.contains(reversedPair))
+				Pair<Integer, Integer> reversedPair = new Pair<Integer, Integer>(pair.second, pair.first);
+				if (!data.tooNearTask.contains(pair) && !data.tooNearTask.contains(reversedPair))
 					data.tooNearTask.add(pair);
 			}
 		}
@@ -119,7 +124,8 @@ public class Parser {
 		if (machPenaltyLineCount < machPenaltyLineLength) {
 			try {
 				String[] splitLine = line.split(" ");
-				if (splitLine.length != machPenaltyLineLength) throw new Exception();
+				if (splitLine.length != machPenaltyLineLength)
+					throw new Exception();
 				int[] machinePenaltyVals = new int[machPenaltyLineLength];
 				for (int i = 0; i < machPenaltyLineLength; i++) {
 					machinePenaltyVals[i] = Integer.parseInt(splitLine[i]);
@@ -134,17 +140,17 @@ public class Parser {
 		} else if (line.isEmpty() && machPenaltyLineCount != machPenaltyLineLength) {
 			ret = false;
 		}
-		if (!ret) sb.append("machine penalty error\n");
+		if (!ret)
+			sb.append("machine penalty error\n");
 		return ret;
 	}
 
 	private boolean parseTooNearPenalties(String line) {
 		boolean ret = true;
 		String[] lineData = line.split(",");
-		int task1 = lineData[0].charAt(0) - 48;
-		int task2 = lineData[1].charAt(0) - 48;
-		if (task1 < 0 || task1 > machPenaltyLineLength || task2 < 0
-				|| task2 > machPenaltyLineLength) {
+		int task1 = lineData[0].charAt(0) - 64;
+		int task2 = lineData[1].charAt(0) - 64;
+		if (task1 < 0 || task1 > machPenaltyLineLength || task2 < 0 || task2 > machPenaltyLineLength) {
 			sb.append("invalid task\n");
 			ret = false;
 		} else {
@@ -171,19 +177,22 @@ public class Parser {
 			char second = lineData[1].charAt(0);
 			if ((first < 1 || first > 8) || (!allowedCharacters.contains(second)))
 				ret = null;
-			else ret = new Pair<Integer, Character>(first, second);
+			else
+				ret = new Pair<Integer, Character>(first, second);
 		}
 		return ret;
 	}
 
-	private Pair<Integer, Integer> getIntPair(String line) {
+	private Pair<Integer, Integer> getIntCharPair(String line) {
 		Pair<Integer, Integer> ret = null;
 		String[] lineData = line.split(",");
 		if (lineData.length == 2) {
-			int first = Integer.parseInt(lineData[0]);
-			int second = Integer.parseInt(lineData[1]);
-			if ((first < 1 || first > 8) || (second < 1 || second > 8)) ret = null;
-			else ret = new Pair<Integer, Integer>(first, second);
+			int first = lineData[0].charAt(0) - 64;
+			int second = lineData[1].charAt(0) - 64;
+			if ((first < 1 || first > 8) || (second < 1 || second > 8))
+				ret = null;
+			else
+				ret = new Pair<Integer, Integer>(first, second);
 		}
 		return ret;
 	}
