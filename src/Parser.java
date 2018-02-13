@@ -15,7 +15,7 @@ public class Parser {
 	private int machPenaltyLineCount = 0;
 	private int headerCount = 0;
 	private final int machPenaltyLineLength = Main.dimension;
-	boolean flag = false;
+	boolean flag = true;
 
 	private StringBuilder sb;
 
@@ -41,9 +41,9 @@ public class Parser {
 					}
 				}
 			}
-			if (headerCount != header.length()) {
-				data = null;
-				if (!flag) sb.append("Error while parsing input file\n");
+			if (headerCount != headers.size()) {
+				// data = null;
+				// sb.append("Error while parsing input file\n");
 			}
 			scan.close();
 		} catch (FileNotFoundException fnfe) {
@@ -72,7 +72,7 @@ public class Parser {
 			ret = parseTooNearPenalties(line);
 		} else {
 			sb.append("Error while parsing input file\n");
-			flag =true;
+			flag = true;
 		}
 		return ret;
 	}
@@ -140,22 +140,32 @@ public class Parser {
 		} else if (line.isEmpty() && machPenaltyLineCount != machPenaltyLineLength) {
 			ret = false;
 		}
-		if (!ret)
+		if (!ret) {
 			sb.append("machine penalty error\n");
+			flag = true;
+		}
 		return ret;
 	}
 
 	private boolean parseTooNearPenalties(String line) {
-		boolean ret = true;
 		String[] lineData = line.split(",");
+		if (line.length() == 0) return true;
+		if (lineData.length != 3) return false;
 		int task1 = lineData[0].charAt(0) - 64;
 		int task2 = lineData[1].charAt(0) - 64;
 		if (task1 < 0 || task1 > machPenaltyLineLength || task2 < 0 || task2 > machPenaltyLineLength) {
 			sb.append("invalid task\n");
-			ret = false;
+			return false;
 		} else {
 			Triple oldTriple = data.hasTooNearPenalty(task1, task2);
-			int penalty = Integer.parseInt(lineData[2]);
+			int penalty;
+			try {
+				penalty = Integer.parseInt(lineData[2]);
+			} catch (NumberFormatException e) {
+				flag = false;
+				sb.append("Error while parsing input file\n");
+				return false;
+			}
 			Triple newTriple = new Triple(task1, task2, penalty);
 			if (oldTriple != null) {
 				if (!newTriple.equals(oldTriple)) {
@@ -165,20 +175,25 @@ public class Parser {
 			} else {
 				data.tooNearPenalties.add(newTriple);
 			}
+			return true;
 		}
-		return ret;
 	}
 
 	private Pair<Integer, Character> getPair(String line) {
 		Pair<Integer, Character> ret = null;
 		String[] lineData = line.split(",");
 		if (lineData.length == 2) {
-			int first = Integer.parseInt(lineData[0]);
-			char second = lineData[1].charAt(0);
-			if ((first < 1 || first > 8) || (!allowedCharacters.contains(second)))
+			int first;
+			try {
+				first = Integer.parseInt(lineData[0]);
+				char second = lineData[1].charAt(0);
+				if ((first < 1 || first > 8) || (!allowedCharacters.contains(second)))
+					ret = null;
+				else
+					ret = new Pair<Integer, Character>(first, second);
+			} catch (NumberFormatException e) {
 				ret = null;
-			else
-				ret = new Pair<Integer, Character>(first, second);
+			}
 		}
 		return ret;
 	}
