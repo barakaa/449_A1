@@ -69,8 +69,10 @@ public class Data {
 	public Triple hasTooNearPenalty(int task1, int task2) {
 		Triple ret = null;
 		for (Triple triple : tooNearPenalties) {
-			ret = triple;
-			if (triple.task1 == task1 && triple.task2 == task2) break;
+			if (triple.task1 == task1 && triple.task2 == task2) {
+				ret = triple;
+				break;
+			}
 		}
 		return ret;
 	}
@@ -81,3 +83,4 @@ public class Data {
 		return new Pair<Integer, Character>(mach, val);
 	}
 }
+
