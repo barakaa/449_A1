@@ -82,5 +82,14 @@ public class Data {
 		char val = (char) (task + 64);
 		return new Pair<Integer, Character>(mach, val);
 	}
-}
 
+	public boolean hasSimilarForcedPartialAssignemnt(Pair<Integer, Character> pair) {
+		if (pair == null) return false;
+		for (Pair<Integer, Character> tempPair : forcedPartialAssignemnt) {
+			if (tempPair.first.equals(pair.first) || tempPair.second.equals(pair.second)) {
+				return true;
+			}
+		}
+		return false;
+	}
+}

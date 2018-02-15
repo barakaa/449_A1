@@ -84,8 +84,12 @@ public class Parser {
 			sb.append("invalid machine/task\n");
 			ret = false;
 		} else {
-			if (!data.forcedPartialAssignemnt.contains(pair) && pair != null)
+			if (!data.forcedPartialAssignemnt.contains(pair) && pair != null) {
 				data.forcedPartialAssignemnt.add(pair);
+            } else if (data.forcedPartialAssignemnt.contains(pair) || data.hasSimilarForcedPartialAssignemnt(pair)) {
+                sb.append("partial assignment error");
+                ret = false;
+            }
 		}
 		return ret;
 	}
