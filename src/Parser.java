@@ -84,12 +84,12 @@ public class Parser {
 			sb.append("invalid machine/task\n");
 			ret = false;
 		} else {
-			if (!data.forcedPartialAssignemnt.contains(pair) && pair != null) {
-				data.forcedPartialAssignemnt.add(pair);
-            } else if (data.forcedPartialAssignemnt.contains(pair) || data.hasSimilarForcedPartialAssignemnt(pair)) {
-                sb.append("partial assignment error");
+			if (data.forcedPartialAssignemnt.contains(pair) || data.hasSimilarForcedPartialAssignemnt(pair)) {
+                sb.append("partial assignment error\n");
                 ret = false;
-            }
+			} else if (!data.forcedPartialAssignemnt.contains(pair) && pair != null) {
+				data.forcedPartialAssignemnt.add(pair);
+			}
 		}
 		return ret;
 	}
@@ -138,13 +138,15 @@ public class Parser {
 				machPenaltyLineCount++;
 			} catch (Exception e) {
 				ret = false;
+				sb.append("invalid penalty\n");
+				flag = true;
 			}
 		} else if (!line.isEmpty()) {
 			ret = false;
 		} else if (line.isEmpty() && machPenaltyLineCount != machPenaltyLineLength) {
 			ret = false;
 		}
-		if (!ret) {
+		if (!ret && !flag) {
 			sb.append("machine penalty error\n");
 			flag = true;
 		}
@@ -167,7 +169,7 @@ public class Parser {
 				penalty = Integer.parseInt(lineData[2]);
 			} catch (NumberFormatException e) {
 				flag = false;
-				sb.append("Error while parsing input file\n");
+				sb.append("invalid penalty\n");
 				return false;
 			}
 			Triple newTriple = new Triple(task1, task2, penalty);
