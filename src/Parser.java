@@ -13,9 +13,9 @@ public class Parser {
 			Arrays.asList('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'));
 	private Data data;
 	private int machPenaltyLineCount = 0;
-	private int headerCount = 0;
 	private final int machPenaltyLineLength = Main.dimension;
-	boolean flag = true;
+	boolean flag = true, f2 = false, f3 = false;
+	
 
 	private StringBuilder sb;
 
@@ -33,17 +33,12 @@ public class Parser {
 				line = scan.nextLine().trim();
 				if (headers.contains(line)) {
 					header = line;
-					headerCount++;
 				} else {
 					if (!parseLine(line, header)) {
 						data = null;
 						break;
 					}
 				}
-			}
-			if (headerCount != headers.size()) {
-				// data = null;
-				// sb.append("Error while parsing input file\n");
 			}
 			scan.close();
 		} catch (FileNotFoundException fnfe) {
@@ -54,27 +49,44 @@ public class Parser {
 
 	private boolean parseLine(String line, String header) {
 		boolean ret = false;
-		line = line.replaceAll("[\\(\\)]", "");
-		if (header.equals(headers.get(0))) {
-			if (line.length() > 0) {
+		line = line.replaceAll("[\\(\\)]", "").trim();
+		if (header == null) {
+			errorWhileParsing();
+			ret = false;
+		} else if (header.equals(headers.get(0))) {
+			if (line.length() > 0  && data.name == null) {
 				data.name = line;
-			}
-			ret = true;
+				ret = true;
+			} else if (line.length() > 0 && data.name != null) {
+				errorWhileParsing();
+				ret = false;
+			} else ret = true;
 		} else if (header.equals(headers.get(1))) {
-			ret = parseForcedPartialAssignemnt(line);
+			if (line.length() == 3 || line.length() == 0) ret = parseForcedPartialAssignemnt(line);
+			else errorWhileParsing();
 		} else if (header.equals(headers.get(2))) {
-			ret = parseForbiddenMachine(line);
+			if (line.length() == 3 || line.length() == 0) ret = parseForbiddenMachine(line);
+			else errorWhileParsing();
 		} else if (header.equals(headers.get(3))) {
-			ret = parseTooNearTask(line);
+			if (line.length() == 3 || line.length() == 0) ret = parseTooNearTask(line);
+			else errorWhileParsing();
 		} else if (header.equals(headers.get(4))) {
 			ret = parseMachinePenalties(line);
+			if (f3) {
+				errorWhileParsing();
+				ret = false;
+			}
 		} else if (header.equals(headers.get(5))) {
 			ret = parseTooNearPenalties(line);
 		} else {
-			sb.append("Error while parsing input file\n");
-			flag = true;
+			errorWhileParsing();
 		}
 		return ret;
+	}
+
+	private void errorWhileParsing() {
+		sb.append("Error while parsing input file\n");
+		flag = true;
 	}
 
 	private boolean parseForcedPartialAssignemnt(String line) {
@@ -83,13 +95,16 @@ public class Parser {
 		if (line.length() > 0 && pair == null) {
 			sb.append("invalid machine/task\n");
 			ret = false;
+		} else if (line.length() == 0 && f2) {
+			return true;
 		} else {
 			if (data.forcedPartialAssignemnt.contains(pair) || data.hasSimilarForcedPartialAssignemnt(pair)) {
-                sb.append("partial assignment error\n");
-                ret = false;
+				sb.append("partial assignment error\n");
+				ret = false;
 			} else if (!data.forcedPartialAssignemnt.contains(pair) && pair != null) {
 				data.forcedPartialAssignemnt.add(pair);
 			}
+			f2 = true;
 		}
 		return ret;
 	}
@@ -124,26 +139,43 @@ public class Parser {
 	}
 
 	private boolean parseMachinePenalties(String line) {
-		boolean ret = true;
-		if (machPenaltyLineCount < machPenaltyLineLength) {
+		boolean ret = true, lineLength = false, f = false;
+		int length = 0;
+		if (line.isEmpty() && machPenaltyLineCount != machPenaltyLineLength) {
+			ret = false;
+			flag = false;
+		} else if (machPenaltyLineCount < machPenaltyLineLength) {
 			try {
 				String[] splitLine = line.split(" ");
-				if (splitLine.length != machPenaltyLineLength)
+				length = splitLine.length;
+				if (length != machPenaltyLineLength) {
+					lineLength = true;
+					ret = false;
+					flag = false;
 					throw new Exception();
+				}
 				int[] machinePenaltyVals = new int[machPenaltyLineLength];
 				for (int i = 0; i < machPenaltyLineLength; i++) {
 					machinePenaltyVals[i] = Integer.parseInt(splitLine[i]);
 				}
 				data.setPenaltyLine(machPenaltyLineCount, machinePenaltyVals);
 				machPenaltyLineCount++;
+				f = true;
 			} catch (Exception e) {
-				ret = false;
-				sb.append("invalid penalty\n");
-				flag = true;
+				if (!lineLength) {
+					ret = false;
+					sb.append("invalid penalty\n");
+					flag = true;
+				}
 			}
+		} else if (machPenaltyLineCount == machPenaltyLineLength && line.split(" ").length == 8) {
+			ret = false;
+			flag = false;
 		} else if (!line.isEmpty()) {
 			ret = false;
-		} else if (line.isEmpty() && machPenaltyLineCount != machPenaltyLineLength) {
+		}
+		if (line.split(" ").length != 8 && machPenaltyLineCount == machPenaltyLineLength && !line.isEmpty() && !f) {
+			f3 = true;
 			ret = false;
 		}
 		if (!ret && !flag) {
